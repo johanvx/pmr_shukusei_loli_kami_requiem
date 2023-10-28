@@ -1,7 +1,7 @@
 use crossterm::{cursor, ExecutableCommand};
 use std::error::Error;
 use std::fs::File;
-use std::io::{stdout, BufRead, BufReader, Write};
+use std::io::{stdout, BufRead, BufReader};
 use std::time::Instant;
 
 fn main() -> Result<(), Box<dyn Error>> {
