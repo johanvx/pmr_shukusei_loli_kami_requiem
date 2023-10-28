@@ -15,6 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     for line in bufreader.lines() {
         if count == 159 {
             stdout.execute(cursor::MoveToRow(1))?;
+            count = 0;
         }
         println!("{}", line?);
         count += 1;
