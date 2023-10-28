@@ -1,4 +1,4 @@
-use rascii_art::{charsets::BLOCK, render_to, RenderOptions};
+use rascii_art::{render_to, RenderOptions};
 use rayon::prelude::*;
 use std::error::Error;
 use std::fs;
@@ -7,10 +7,11 @@ use std::time::Instant;
 fn main() -> Result<(), Box<dyn Error>> {
     // RASCII settings
     const WIDTH: u32 = 852;
+    const PMR_CHARSET: &[&str] = &["P", "M", "R"];
     let option = RenderOptions::new()
-        .width(WIDTH / 3 * 2)
+        .width(WIDTH / 71 * 30)
         .colored(true)
-        .charset(BLOCK);
+        .charset(PMR_CHARSET);
 
     // Number of images
     const COUNT: usize = 8198;
