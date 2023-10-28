@@ -6,16 +6,15 @@ use std::time::Instant;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // RASCII settings
-    const WIDTH: u32 = 852;
+    const WIDTH: u32 = 1920;
     const PMR_CHARSET: &[&str] = &["P", "M", "R"];
     let option = RenderOptions::new()
-        .width(WIDTH / 71 * 30)
+        .width(WIDTH / 192 * 30)
         .colored(true)
         .charset(PMR_CHARSET);
 
     // Number of images
     const COUNT: usize = 8198;
-    // const COUNT: usize = 100;
 
     // Render images to texts in parallel
     let start = Instant::now();

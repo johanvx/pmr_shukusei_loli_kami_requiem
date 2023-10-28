@@ -1,27 +1,56 @@
 use crossterm::{cursor, ExecutableCommand};
 use std::error::Error;
 use std::fs::File;
-use std::io::{stdout, BufRead, BufReader};
-use std::time::Instant;
+use std::io::{self, stdout, BufRead, BufReader};
+use std::path::Path;
+use tokio::time::{sleep_until, Instant, Duration};
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let file = File::open("output/pmr.txt")?;
-    let bufreader = BufReader::new(file);
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let frame_rate = 32;
+    let frame_duration = Duration::from_secs(1) / frame_rate;
 
-    // Print one file
+    // Set the frame height
+    let frame_height= 85;
+
     let mut stdout = stdout();
+    let mut lines = read_lines("output/pmr.txt")?;
     let start = Instant::now();
-    let mut count = 0;
-    for line in bufreader.lines() {
-        if count == 159 {
-            stdout.execute(cursor::MoveToRow(1))?;
-            count = 0;
-        }
+
+    while let Some(line) = lines.next() {
+        // Start of the frame
+        let frame_start = Instant::now();
+
+        // Move to the first line
+        stdout.execute(cursor::MoveTo(0, 1))?;
+
+        // Print a frame
         println!("{}", line?);
-        count += 1;
+        for _ in 0..(frame_height - 1) {
+            if let Some(line) = lines.next() {
+                println!("{}", line?);
+            }
+        }
+
+        // Sleep if elapsed time is shorter than frame_duration
+        let frame_end = frame_start + frame_duration;
+        if frame_end > Instant::now() {
+            sleep_until(frame_end).await;
+        } else {
+            panic!("Cannot play in {} fps", frame_rate);
+        }
     }
+
     let duration = start.elapsed();
-    println!("Time elapsed for printing one file is: {:?}", duration);
+    println!("Elapsed {:?}.", duration);
 
     Ok(())
+}
+
+fn read_lines<P>(path: P) -> io::Result<io::Lines<BufReader<File>>>
+where
+    P: AsRef<Path>,
+{
+    let file = File::open(path)?;
+    Ok(BufReader::new(file).lines())
 }
