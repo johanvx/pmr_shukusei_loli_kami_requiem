@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Save texts to files in parallel
     let save_start = Instant::now();
     buffers.into_par_iter().for_each(|(txt_path, buffer)| {
-        fs::write(txt_path, &buffer).expect("Write string to file should not fail.");
+        fs::write(&txt_path, buffer + "\n").expect("Write to file should not fail.");
     });
     let duration = start.elapsed();
     let save_duration = save_start.elapsed();
