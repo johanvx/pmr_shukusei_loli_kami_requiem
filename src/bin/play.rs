@@ -69,27 +69,32 @@ async fn write_frames(
     let mut stdout = io::stdout();
     let start = Instant::now();
 
-    while let Some(frame) = receiver.recv().await {
+    loop {
         let frame_start = Instant::now();
 
-        // Move to the first line
-        stdout.execute(cursor::MoveTo(0, 1))?;
+        match receiver.recv().await {
+            None => break,
+            Some(frame) => {
+                // Move to the first line
+                stdout.execute(cursor::MoveTo(0, 1))?;
 
-        // Print the complete frame
-        for line in &frame {
-            println!("{}", line);
-        }
+                // Print the complete frame
+                for line in &frame {
+                    println!("{}", line);
+                }
 
-        // Panic if elapsed time is longer than frame_duration
-        let frame_elapsed = frame_start.elapsed();
-        if frame_elapsed > frame_duration {
-            panic!("Cannot play in {} fps", frame_rate);
-        }
+                // Panic if elapsed time is longer than frame_duration
+                let frame_elapsed = frame_start.elapsed();
+                if frame_elapsed > frame_duration {
+                    panic!("Cannot play in {} fps", frame_rate);
+                }
 
-        // Sleep if elapsed time is shorter than frame_duration
-        let frame_end = frame_start + frame_duration;
-        if frame_end > Instant::now() {
-            sleep_until(frame_end).await;
+                // Sleep if elapsed time is shorter than frame_duration
+                let frame_end = frame_start + frame_duration;
+                if frame_end > Instant::now() {
+                    sleep_until(frame_end).await;
+                }
+            }
         }
     }
 
