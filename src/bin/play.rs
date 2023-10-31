@@ -4,13 +4,13 @@ use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 use std::path::Path;
 use tokio::sync::mpsc;
-use tokio::time::{sleep_until, Instant, Duration};
+use tokio::time::{sleep_until, Duration, Instant};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // Frame settings
     let frame_rate = 32;
-    let frame_height= 85;
+    let frame_height = 85;
 
     // Channel settings
     let buffer_size = frame_height * 2;
