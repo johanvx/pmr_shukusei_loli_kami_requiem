@@ -1,5 +1,11 @@
 # PMR Shukusei Loli Kami Requiem
 
+**CAUTION:** The method used in this repository consumes a huge amount of disk
+space, so make sure you have enough space for it. Check [ascii-art-converter]
+for an improved method.
+
+[ascii-art-converter]: https://github.com/johanvx/ascii-art-converter
+
 This is an ASCII Art version of
 [粛聖!! ロリ神レクイエム☆ / P丸様。（9さい）【歌ってみた】],
 and the output of [play.rs](src/bin/play.rs) is recorded and published as [a
